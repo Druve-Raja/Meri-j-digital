@@ -1,0 +1,928 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>A Little Love Gift 💘</title>
+  <style>
+    :root{
+      --bg1:#070712; --bg2:#120b1f;
+      --glass:#ffffff12; --glass2:#ffffff1c;
+      --text:#f7f6ff; --muted:#cfcaf6;
+      --pink:#ff4d8d; --violet:#7b6cff; --mint:#19d37a;
+      --shadow: 0 18px 60px rgba(0,0,0,.55);
+      --r: 20px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      color:var(--text);
+      min-height:100vh;
+      background:
+        radial-gradient(900px 700px at 15% 10%, #ff4d8d33, transparent 60%),
+        radial-gradient(900px 700px at 80% 25%, #7b6cff30, transparent 58%),
+        radial-gradient(700px 600px at 55% 95%, #19d37a22, transparent 60%),
+        linear-gradient(165deg, var(--bg1), var(--bg2));
+      display:flex;
+      justify-content:center;
+      padding:18px;
+    }
+    .wrap{width:min(960px, 100%);}
+
+    /* Top bar */
+    .top{
+      display:flex; gap:12px; justify-content:space-between; align-items:flex-start;
+      margin: 8px 0 14px;
+    }
+    .title{
+      font-weight:900; letter-spacing:-.02em; margin:0;
+      font-size:clamp(26px,4vw,44px);
+      background:linear-gradient(180deg,#fff,#cfd2ff);
+      -webkit-background-clip:text; background-clip:text; color:transparent;
+      line-height:1.05;
+    }
+    .sub{margin:.4rem 0 0; color:var(--muted); font-size:14.5px; max-width:56ch}
+    .chips{display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end}
+    .chip{
+      user-select:none; cursor:pointer;
+      border-radius:999px; padding:10px 12px;
+      background:var(--glass); border:1px solid #ffffff22;
+      box-shadow:0 10px 24px rgba(0,0,0,.25);
+      color:var(--muted); font-size:13px;
+      transition: transform .12s ease, background .12s ease;
+    }
+    .chip:hover{transform:translateY(-1px); background:var(--glass2)}
+
+    /* Card */
+    .card{
+      border-radius:var(--r);
+      background:linear-gradient(180deg,#ffffff12,#ffffff07);
+      border:1px solid #ffffff1f;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+    .card::before{
+      content:""; position:absolute; inset:-60px;
+      background:
+        radial-gradient(420px 280px at 20% 15%, #ff4d8d26, transparent 60%),
+        radial-gradient(420px 280px at 80% 30%, #7b6cff26, transparent 60%);
+      pointer-events:none;
+    }
+    .inner{position:relative; padding:18px;}
+
+    /* Start screen */
+    .start{
+      display:grid; gap:12px; place-items:center;
+      padding: 34px 18px 26px;
+      text-align:center;
+    }
+    .bigheart{
+      width:92px; height:92px; border-radius:26px;
+      display:grid; place-items:center;
+      background:linear-gradient(135deg,#ff4d8d,#7b6cff);
+      box-shadow:0 22px 60px rgba(255,77,141,.22);
+      font-size:42px;
+      transform:rotate(-4deg);
+    }
+    .start h2{margin:0; font-size:22px; letter-spacing:-.01em}
+    .start p{margin:0; color:var(--muted); font-size:14.5px; max-width:60ch}
+    .btn{
+      width:min(420px, 100%);
+      border:0; cursor:pointer; user-select:none;
+      padding:14px 16px;
+      border-radius:16px;
+      font-weight:900;
+      color:white;
+      background: linear-gradient(90deg, var(--pink), var(--violet));
+      box-shadow:0 16px 40px rgba(255,77,141,.22);
+      transition: transform .12s ease, filter .12s ease;
+    }
+    .btn:hover{transform:translateY(-1px); filter:brightness(1.05)}
+    .mini{font-size:12.5px; color:var(--muted); margin-top:2px}
+
+    /* Progress + chapters */
+    .row{
+      display:flex; justify-content:space-between; align-items:center;
+      gap:12px; flex-wrap:wrap; padding:14px 18px;
+      border-top:1px solid #ffffff14;
+      background:#00000010;
+    }
+    .progress{
+      display:flex; gap:10px; align-items:center; color:var(--muted); font-size:13px;
+    }
+    .bar{width:220px; height:10px; border-radius:999px; background:#ffffff12; border:1px solid #ffffff1f; overflow:hidden}
+    .fill{height:100%; width:0%; border-radius:999px; background:linear-gradient(90deg,var(--pink),var(--violet)); transition:width .25s ease}
+    @media (max-width:760px){ .bar{width:160px;} }
+
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:14px;
+      padding:18px;
+    }
+    @media (max-width:760px){
+      .grid{grid-template-columns: repeat(2, 1fr);}
+    }
+    .chapter{
+      cursor:pointer; user-select:none;
+      border-radius:18px;
+      padding:14px;
+      background:linear-gradient(180deg,#ffffff12,#ffffff08);
+      border:1px solid #ffffff1d;
+      box-shadow:0 14px 40px rgba(0,0,0,.38);
+      transition: transform .12s ease, border-color .12s ease, background .12s ease;
+      min-height:120px;
+      position:relative;
+      overflow:hidden;
+    }
+    .chapter:hover{transform:translateY(-2px); border-color:#ffffff35; background:linear-gradient(180deg,#ffffff18,#ffffff0a)}
+    .c-emoji{font-size:34px; filter:drop-shadow(0 10px 16px rgba(0,0,0,.3))}
+    .c-title{margin-top:10px; font-weight:900; letter-spacing:-.01em; font-size:15px}
+    .c-hint{margin-top:4px; color:var(--muted); font-size:13px}
+    .tag{
+      position:absolute; top:12px; right:12px;
+      font-size:12px; padding:6px 10px; border-radius:999px;
+      background:#0000002e; border:1px solid #ffffff22; color:var(--muted);
+    }
+    .tag.done{background:#19d37a24; border-color:#19d37a55; color:#b9ffd8;}
+    .tag.lock{background:#ff4d8d18; border-color:#ff4d8d44; color:#ffd0e1;}
+
+    /* Modal */
+    .modal{
+      position:fixed; inset:0; display:none; align-items:center; justify-content:center;
+      background: rgba(0,0,0,.6); padding:18px; z-index:50;
+    }
+    .modal.open{display:flex}
+    .panel{
+      width:min(620px, 100%);
+      border-radius:22px;
+      background:linear-gradient(180deg,#14162e,#0c0d1a);
+      border:1px solid #ffffff24;
+      box-shadow:0 26px 80px rgba(0,0,0,.6);
+      overflow:hidden;
+      position:relative;
+    }
+    .panel::before{
+      content:""; position:absolute; inset:-50px;
+      background:
+        radial-gradient(420px 280px at 25% 15%, #ff4d8d30, transparent 60%),
+        radial-gradient(420px 280px at 75% 25%, #7b6cff30, transparent 60%);
+      pointer-events:none;
+    }
+    .phead{
+      position:relative;
+      padding:18px 18px 10px;
+      display:flex; justify-content:space-between; gap:10px; align-items:flex-start;
+    }
+    .phead h3{margin:0; font-size:18px; letter-spacing:-.01em}
+    .close{
+      width:40px; height:40px; border-radius:14px;
+      background:#ffffff12; border:1px solid #ffffff22;
+      color:var(--text); cursor:pointer;
+      display:grid; place-items:center; font-size:18px;
+    }
+    .pbody{position:relative; padding:0 18px 18px; color:#eef0ff; line-height:1.6}
+    .big{font-size:20px; font-weight:950; letter-spacing:-.01em; margin:10px 0 6px}
+    .type{
+      background:#ffffff0a; border:1px solid #ffffff18;
+      padding:14px; border-radius:16px;
+      min-height:88px;
+    }
+    .actions{display:flex; gap:10px; margin-top:12px; flex-wrap:wrap}
+    .pill{
+      border:1px solid #ffffff22; background:#ffffff10; color:var(--text);
+      padding:10px 12px; border-radius:14px; cursor:pointer; font-weight:900;
+    }
+    .pill.primary{
+      border:0;
+      background: linear-gradient(90deg, var(--pink), var(--violet));
+      box-shadow:0 14px 34px rgba(255,77,141,.18);
+    }
+
+    /* Quiz */
+    .quiz{
+      margin-top:12px;
+      border-radius:16px;
+      border:1px solid #ffffff18;
+      background:#ffffff0a;
+      padding:12px;
+    }
+    .q{font-weight:900; margin:0 0 10px}
+    .opts{display:grid; gap:10px}
+    .opt{
+      cursor:pointer;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid #ffffff22;
+      background:#ffffff10;
+      color:var(--text);
+      font-weight:800;
+      transition: transform .12s ease, background .12s ease;
+    }
+    .opt:hover{transform:translateY(-1px); background:#ffffff14}
+    .opt.good{border-color:#19d37a66; background:#19d37a18}
+    .opt.bad{border-color:#ff4d8d66; background:#ff4d8d18}
+    .note{color:var(--muted); font-size:13px; margin-top:10px}
+
+    /* Press to reveal */
+    .holdBox{
+      margin-top:12px;
+      border-radius:16px;
+      border:1px solid #ffffff18;
+      background:#ffffff0a;
+      padding:12px;
+    }
+    .holdTitle{font-weight:900; margin:0 0 10px}
+    .holdBtn{
+      width:100%;
+      padding:14px 14px;
+      border-radius:16px;
+      border:1px solid #ffffff22;
+      background:#ffffff10;
+      color:var(--text);
+      font-weight:950;
+      cursor:pointer;
+      position:relative;
+      overflow:hidden;
+    }
+    .holdFill{
+      position:absolute; inset:0;
+      width:0%;
+      background:linear-gradient(90deg, #ff4d8d55, #7b6cff55);
+      transition: width .08s linear;
+    }
+    .holdText{position:relative}
+    .secret{
+      margin-top:10px;
+      padding:12px;
+      border-radius:14px;
+      border:1px dashed #ffffff30;
+      background:#0000001a;
+      display:none;
+    }
+    .secret.show{display:block}
+
+    /* Confetti */
+    .confetti{position:fixed; inset:0; pointer-events:none; overflow:hidden; z-index:60}
+    .piece{position:absolute; top:-12px; width:10px; height:14px; border-radius:3px; opacity:.95; animation:fall linear forwards}
+    @keyframes fall{to{transform:translateY(112vh) rotate(720deg); opacity:.98}}
+
+    /* Center the last tile when there is an odd one (e.g., 7th) */
+    @media (min-width: 761px){
+      .grid .chapter:last-child{ grid-column: 2 / span 1; }
+    }
+    @media (max-width: 760px){
+      /* On 2-column layout, center by spanning both columns */
+      .grid .chapter:last-child{ grid-column: 1 / -1; justify-self:center; width:min(420px, 100%); }
+    }
+
+  
+    /* Subtle breathing glow for subtitle */
+    .breathing-glow{
+      animation: breatheGlow 4s ease-in-out infinite;
+    }
+    @keyframes breatheGlow{
+      0%{ text-shadow: 0 0 0 rgba(255,255,255,0); }
+      50%{ text-shadow: 0 0 10px rgba(255,255,255,0.35); }
+      100%{ text-shadow: 0 0 0 rgba(255,255,255,0); }
+    }
+
+
+/* Strong glow for subtitle */
+.strong-glow{
+  color:#fff;
+  text-shadow:
+    0 0 6px rgba(255,255,255,0.6),
+    0 0 12px rgba(255,182,193,0.6),
+    0 0 20px rgba(255,77,141,0.6);
+}
+
+
+/* Pulsing glow for subtitle */
+.pulse-glow{
+  animation: pulseGlow 3.8s ease-in-out infinite;
+}
+@keyframes pulseGlow{
+  0%{
+    text-shadow:
+      0 0 4px rgba(255,255,255,0.3),
+      0 0 8px rgba(255,182,193,0.3),
+      0 0 12px rgba(255,77,141,0.3);
+  }
+  50%{
+    text-shadow:
+      0 0 8px rgba(255,255,255,0.8),
+      0 0 16px rgba(255,182,193,0.8),
+      0 0 28px rgba(255,77,141,0.9);
+  }
+  100%{
+    text-shadow:
+      0 0 4px rgba(255,255,255,0.3),
+      0 0 8px rgba(255,182,193,0.3),
+      0 0 12px rgba(255,77,141,0.3);
+  }
+}
+
+
+    /* Wide chapter tile (spans full row) */
+    .chapter.wide{
+      grid-column: 1 / -1;
+      min-height: 110px;
+    }
+    .inlineHold{
+      margin-top:10px;
+      border-radius:14px;
+      border:1px solid #ffffff22;
+      background:#ffffff0b;
+      overflow:hidden;
+      position:relative;
+      height:44px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:950;
+    }
+    .inlineHoldFill{
+      position:absolute; inset:0;
+      width:0%;
+      background:linear-gradient(90deg, #ff4d8d55, #7b6cff55);
+      transition: width .08s linear;
+    }
+    .inlineHoldText{position:relative; padding:0 12px; text-align:center;}
+    .inlineReveal{
+      margin-top:10px;
+      padding:12px;
+      border-radius:14px;
+      border:1px dashed #ffffff35;
+      background:#00000018;
+      display:none;
+      line-height:1.6;
+      color:#eef0ff;
+    }
+    .inlineReveal.show{display:block;}
+
+
+/* Desktop grid fix: ensure wide tiles span full row */
+@media (min-width: 900px){
+  .grid{
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .chapter.wide{
+    grid-column: 1 / -1;
+  }
+}
+
+
+/* Force the last two tiles (Box 7 & Box 8) to span full width on desktop */
+@media (min-width: 700px){
+  #grid > .chapter:nth-last-child(2),
+  #grid > .chapter:last-child{
+    grid-column: 1 / -1 !important;
+  }
+}
+
+
+/* Center text for wide boxes (7 & 8) on desktop */
+@media (min-width: 700px){
+  .chapter.wide,
+  #grid > .chapter:nth-last-child(2),
+  #grid > .chapter:last-child{
+    text-align: center;
+    align-items: center;
+  }
+  .chapter.wide .c-emoji,
+  #grid > .chapter:nth-last-child(2) .c-emoji,
+  #grid > .chapter:last-child .c-emoji{
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <div>
+        <h1 class="title" id="headline">A little something for Meri Jaan 💘</h1>
+        <p class="sub" id="subline"><span class="breathing-glow"><span class="pulse-glow">Hoping to make your day better and Ayope yirla dulangka</span></span></p>
+      </div>
+      <div class="chips">
+        <div class="chip" id="resetBtn">↩︎ Reset</div>
+        <div class="chip" id="shareBtn"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="inner" id="startScreen">
+        <div class="start">
+          <div class="bigheart">💞</div>
+          <h2 id="startTitle">For you My Queen 👑</h2>
+          <p id="startDesc">Press begin. Take your time. And don’t rush the last one.</p>
+          <button class="btn" id="beginBtn">Begin the little journey →</button>
+          
+        </div>
+      </div>
+
+      <div id="main" style="display:none">
+        <div class="grid" id="grid"></div>
+
+        <div class="row">
+          <div class="progress">
+            <span id="count">0/0 opened</span>
+            <div class="bar"><div class="fill" id="fill"></div></div>
+          </div>
+          <div style="color:var(--muted); font-size:13px">Open in order ➜ unlock the final Box ✨</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="modal">
+    <div class="panel" role="dialog" aria-modal="true">
+      <div class="phead">
+        <h3 id="mTitle">Title</h3>
+        <button class="close" id="closeBtn" aria-label="Close">✕</button>
+      </div>
+      <div class="pbody">
+        <div class="big" id="mEmoji">💌</div>
+
+        <div class="type" id="typeBox">
+          <span id="typed"></span><span id="cursor" style="opacity:.8">▍</span>
+        </div>
+
+        <div id="extra"></div>
+
+        <div class="actions">
+          <button class="pill" id="replayBtn">Replay typing</button>
+          <button class="pill primary" id="okBtn">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="confetti" id="confetti"></div>
+
+  <script>
+    /************ ✅ EDIT THESE ************/
+
+    // Chapters are unlocked IN ORDER.
+    // You can change the text to be more personal (best results).
+    const chapters = [
+      {
+        emoji:"🌹",
+        label:"First rose",
+        hint:"Tap to open",
+        title:"A soft beginning",
+        text:`Hi My love. Just for a minute… let the world pause, let the stress of work fade. I made this just for you.`
+      },
+      {
+        emoji:"💬",
+        label:"What I like",
+        hint:"Small truth",
+        title:"What I love about you",
+        text:"It’s your energy, your smile, your soul. The way you make things feel warm and easy. The way you say crazy things ( like helicopter chase ) 😂"
+      },
+      {
+        emoji:"🕯️",
+        label:"A promise",
+        hint:"Gentle one",
+        title:"A promise I mean",
+        text:"No matter how busy life gets, I'll always choose you. I'll always try to make time for you. And I'll show up for you. Your my ride or die 👸🏻🤴🏻"
+      },
+      {
+        emoji:"🎯",
+        label:"Little quiz",
+        hint:"Be honest 😄",
+        title:"A cute question",
+        text:"One question before the next chapter…2 correct answers",
+        quiz:{
+          q:"What do you deserve the most right now? (Pick 2)",
+          options:[
+            {t:"Peace + calm with a little crazy 😝", ok:true, reply:"Yes. Real peace. The kind you can feel in your chest."},
+            {t:"Someone who never leaves", ok:true, reply:"Correct. That’s the standard. Nothing less."},
+            {t:"Stress and overthinking", ok:false, reply:"Nope. We’re deleting that option 😂"},
+            {t:"Bare minimum energy", ok:false, reply:"Not for you. Never."}
+          ]
+        }
+      },
+      {
+        emoji:"💋",
+        label:"Press to reveal",
+        hint:"Press",
+        title:"Okay I really mean this ",
+        text:" Rani… this one is interactive.",
+        hold:{
+          prompt:"",
+          secret:`Meri kaangkane rani, not a day goes by where I don’t think about you. You are more than special to me. Mera Dil tumhara hai`
+        }
+      },
+      {
+        emoji:"💌",
+        label:"Letter",
+        hint:"Click me",
+        title:"To My Jaan",
+        text: `If I could put one feeling in your hands, it would be that, you are deeply wanted, valued, and safe with me. I don’t just like you I also respect you, admire you and choose you. I’m grateful you exist in my life.
+
+Now come here… and give me the biggest hug let me take all your troubles away (virtually) 🫶`,
+        final:true
+      }
+      ,
+      {
+        emoji:"☀️ 🌙",
+        label:"You Are",
+        wide:true,
+        hint:"Click to read me",
+        title:"You are truly",
+        text:`Meri good morning tu hai, meri good night bhi tu.
+
+`
+      }
+      ,
+      {
+        emoji:"🤍",
+        label:"Hold to reveal",
+        hint:"Hold the bar",
+        title:"",              /* no modal */
+        text:"",               /* no modal */
+        wide:true,
+        holdInline:{
+          prompt:"Hold until it fills 🤍",
+          secret:"Tum hi ho meri jaan 🤍 "
+        }
+      }
+
+    ];
+    /************ END EDIT ************/
+
+    const KEY="romantic_gift_v2";
+    const grid=document.getElementById("grid");
+    const modal=document.getElementById("modal");
+    const mTitle=document.getElementById("mTitle");
+    const mEmoji=document.getElementById("mEmoji");
+    const typed=document.getElementById("typed");
+    const cursor=document.getElementById("cursor");
+    const extra=document.getElementById("extra");
+    const closeBtn=document.getElementById("closeBtn");
+    const okBtn=document.getElementById("okBtn");
+    const replayBtn=document.getElementById("replayBtn");
+    const countEl=document.getElementById("count");
+    const fillEl=document.getElementById("fill");
+    const resetBtn=document.getElementById("resetBtn");
+    const shareBtn=document.getElementById("shareBtn");
+    const confetti=document.getElementById("confetti");
+    const beginBtn=document.getElementById("beginBtn");
+    const startScreen=document.getElementById("startScreen");
+    const main=document.getElementById("main");
+    const headline=document.getElementById("headline");
+    const subline=document.getElementById("subline");
+    const startTitle=document.getElementById("startTitle");
+    const startDesc=document.getElementById("startDesc");
+
+    headline.textContent = `A little something for Meri Jaan 💗ྀི`;
+    subline.innerHTML = '<span class="breathing-glow">Hoping to make your day better and Ayope yirla dulangka</span>';
+    startTitle.textContent = `For you My Queen 👑`;
+    startDesc.textContent = "Press begin. Take your time.";
+
+    let state = loadState(); // { openedCount: number }
+
+    function loadState(){
+      try{ return JSON.parse(localStorage.getItem(KEY)) || {opened:0}; }
+      catch(e){ return {opened:0}; }
+    }
+    function saveState(){ localStorage.setItem(KEY, JSON.stringify(state)); }
+
+    function isUnlocked(i){
+      return i <= state.opened; // can open current next
+    }
+    function isDone(i){
+      return i < state.opened;
+    }
+    function total(){ return chapters.length; }
+
+    function render(){
+      grid.innerHTML="";
+      const opened = state.opened;
+      const t = total();
+
+      chapters.forEach((c,i)=>{
+        const done = isDone(i);
+        const unlocked = isUnlocked(i);
+        const locked = !unlocked;
+
+        const tile = document.createElement("div");
+        tile.className = "chapter" + (c.wide ? " wide" : "");
+
+        // Inline hold-only tile (no modal open)
+        if(c.holdInline){
+          tile.style.cursor = locked ? "not-allowed" : "pointer";
+          tile.innerHTML = `
+            <div class="tag ${done ? "done" : (locked ? "lock":"")}">${done ? "Opened" : (locked ? "Locked" : "Next")}</div>
+            <div class="c-emoji">${c.emoji}</div>
+            <div class="c-title">${c.label}</div>
+            <div class="c-hint">${locked ? "Open the previous one first 💗" : c.hint}</div>
+
+            <div class="inlineHold" data-inlinehold="1">
+              <div class="inlineHoldFill"></div>
+              <div class="inlineHoldText">${locked ? "Locked 💗" : c.holdInline.prompt}</div>
+            </div>
+            <div class="inlineReveal">${c.holdInline.secret}</div>
+          `;
+
+          if(!locked){
+            const holdArea = tile.querySelector('[data-inlinehold="1"]');
+            const fill = tile.querySelector('.inlineHoldFill');
+            const reveal = tile.querySelector('.inlineReveal');
+
+            let held=false, t=0, raf=null;
+
+            const start = (e)=>{
+              if(reveal.classList.contains("show")) return;
+              held=true; t=0;
+              const step = ()=>{
+                if(!held) return;
+                t += 16;
+                const pct = Math.min(100, (t/950)*100);
+                fill.style.width = pct + "%";
+                if(pct >= 100){
+                  reveal.classList.add("show");
+                  // mark inline-hold chapter as opened
+                  if(state.opened === i){
+                    state.opened = Math.min(state.opened + 1, total());
+                    saveState();
+                    render();
+                  }
+        
+                  fill.style.width = "100%";
+                  pulseConfetti(45);
+                  held = false;
+                  return;
+                }
+                raf = requestAnimationFrame(step);
+              };
+              raf = requestAnimationFrame(step);
+            };
+            const end = ()=>{
+              held=false;
+              if(raf) cancelAnimationFrame(raf);
+              if(!reveal.classList.contains("show")) fill.style.width="0%";
+            };
+
+            holdArea.addEventListener("mousedown", start);
+            holdArea.addEventListener("touchstart", (e)=>{ e.preventDefault(); start(e); }, {passive:false});
+            window.addEventListener("mouseup", end);
+            window.addEventListener("touchend", end);
+            window.addEventListener("touchcancel", end);
+            holdArea.addEventListener("mouseleave", end);
+          }
+        } else {
+          tile.innerHTML=`
+            <div class="tag ${done ? "done" : (locked ? "lock":"")}">${done ? "Opened" : (locked ? "Locked" : "Next")}</div>
+            <div class="c-emoji">${c.emoji}</div>
+            <div class="c-title">${c.label}</div>
+            <div class="c-hint">${locked ? "Open the previous one first 💗" : c.hint}</div>
+          `;
+          tile.addEventListener("click", ()=>{ if(!locked) openChapter(i); });
+}
+        tile.setAttribute("tabindex","0");
+        tile.addEventListener("keydown",(e)=>{
+          if(e.key==="Enter"||e.key===" "){ e.preventDefault(); if(!locked) openChapter(i); }
+        });
+
+        grid.appendChild(tile);
+      });
+
+      const openedDisplay = Math.min(state.opened, t);
+      countEl.textContent = `${openedDisplay}/${t} opened`;
+      fillEl.style.width = `${Math.round((openedDisplay/t)*100)}%`;
+    }
+
+    let currentIdx = 0;
+    let typingTimer = null;
+
+    function openChapter(i){
+      currentIdx = i;
+      const c = chapters[i];
+
+      mTitle.textContent = c.title;
+      mEmoji.textContent = c.emoji;
+
+      // clear extras
+      extra.innerHTML = "";
+
+      // setup typing
+      typeText(c.text);
+
+      // add quiz / hold if present
+      if(c.quiz) addQuiz(c.quiz);
+      if(c.hold) addHold(c.hold);
+
+      modal.classList.add("open");
+
+      // mark progress when closing (so they actually "read" it)
+      // But if they open the next chapter already, we still progress properly on close.
+    }
+
+    function typeText(full){
+      if(typingTimer) clearInterval(typingTimer);
+      typed.textContent = "";
+      cursor.style.opacity = .9;
+
+      const text = String(full).replaceAll("\\n","\n");
+      let idx = 0;
+
+      typingTimer = setInterval(()=>{
+        typed.textContent += text[idx] || "";
+        idx++;
+        if(idx >= text.length){
+          clearInterval(typingTimer);
+          typingTimer = null;
+          cursor.style.opacity = 0;
+        }
+      }, 40);
+    }
+
+    function addQuiz(qz){
+      const box = document.createElement("div");
+      box.className = "quiz";
+      box.innerHTML = `
+        <p class="q">${qz.q}</p>
+        <div class="opts"></div>
+        <div class="note" id="qNote">Pick two correct answers 💛</div>
+      `;
+      const opts = box.querySelector(".opts");
+      const note = box.querySelector("#qNote");
+
+      let correctPicked = 0;
+      qz.options.forEach((o)=>{
+        const b = document.createElement("div");
+        b.className = "opt";
+        b.textContent = o.t;
+        b.addEventListener("click", ()=>{
+          if(b.classList.contains("good") || b.classList.contains("bad")) return;
+
+          b.classList.add(o.ok ? "good":"bad");
+
+          if(o.ok){
+            correctPicked++;
+            pulseConfetti(20);
+            if(correctPicked < 2){
+              note.textContent = "Nice 😏 pick one more…";
+            } else {
+              note.textContent = "Perfect 💛 you got both.";
+              // lock all options after two correct
+              Array.from(opts.children).forEach(x=>x.style.pointerEvents="none");
+            }
+          } else {
+            note.textContent = o.reply;
+          }
+        });
+        opts.appendChild(b);
+      });
+
+      extra.appendChild(box);
+    }
+
+    function addHold(hold){
+      const box = document.createElement("div");
+      box.className="holdBox";
+      box.innerHTML=`
+        <div class="holdTitle">${hold.prompt}</div>
+        <button class="holdBtn" id="holdBtn">
+          <div class="holdFill" id="holdFill"></div>
+          <div class="holdText">Press, hold and smile to unlock ❤️</div>
+        </button>
+        <div class="secret" id="secret">${hold.secret}</div>
+        <div class="note">Tip: hold ~1 second.</div>
+      `;
+      extra.appendChild(box);
+
+      const holdBtn = box.querySelector("#holdBtn");
+      const holdFill = box.querySelector("#holdFill");
+      const secret = box.querySelector("#secret");
+
+      let held = false;
+      let t = 0;
+      let raf = null;
+
+      const start = ()=>{
+        if(secret.classList.contains("show")) return;
+        held = true; t = 0;
+        const step = ()=>{
+          if(!held) return;
+          t += 16;
+          const pct = Math.min(100, (t/900)*100);
+          holdFill.style.width = pct + "%";
+          if(pct >= 100){
+            secret.classList.add("show");
+            holdFill.style.width = "100%";
+            pulseConfetti(40);
+            held = false;
+            return;
+          }
+          raf = requestAnimationFrame(step);
+        };
+        raf = requestAnimationFrame(step);
+      };
+
+      const end = ()=>{
+        held = false;
+        if(raf) cancelAnimationFrame(raf);
+        if(!secret.classList.contains("show")) holdFill.style.width="0%";
+      };
+
+      holdBtn.addEventListener("mousedown", start);
+      holdBtn.addEventListener("touchstart", (e)=>{ e.preventDefault(); start(); }, {passive:false});
+      window.addEventListener("mouseup", end);
+      window.addEventListener("touchend", end);
+      window.addEventListener("touchcancel", end);
+      holdBtn.addEventListener("mouseleave", end);
+    }
+
+    function closeModal(){
+      modal.classList.remove("open");
+
+      // progress: if they closed the "next" one, mark it opened
+      if(currentIdx === state.opened){
+        state.opened = Math.min(state.opened + 1, total());
+        saveState();
+        render();
+
+        // confetti on final completion
+        if(state.opened === total()){
+          bigConfetti();
+        }
+      }
+    }
+
+    closeBtn.addEventListener("click", closeModal);
+    okBtn.addEventListener("click", closeModal);
+    modal.addEventListener("click", (e)=>{ if(e.target === modal) closeModal(); });
+
+    replayBtn.addEventListener("click", ()=>{
+      typeText(chapters[currentIdx].text);
+    });
+
+    resetBtn.addEventListener("click", ()=>{
+      localStorage.removeItem(KEY);
+      state = {opened:0};
+      render();
+      // go back to start screen
+      main.style.display="none";
+      startScreen.style.display="block";
+    });
+
+    shareBtn.addEventListener("click", ()=>{
+      
+    });
+
+    function pulseConfetti(pieces=30){
+      const box = document.getElementById("confetti");
+      const heartChance = 0.30; // 30% hearts
+      const pinks = ["#ff4d8d","#ff77a9","#ff9fc5","#ffd1e3","#ffffff"];
+
+      for(let i=0;i<pieces;i++){
+        const p=document.createElement("div");
+        p.className="piece";
+        p.style.left=(Math.random()*100)+"vw";
+        p.style.animationDuration=(2.2+Math.random()*1.8)+"s";
+
+        if(Math.random() < heartChance){
+          // heart particle
+          p.textContent = "❤";
+          p.style.background = "transparent";
+          p.style.fontSize = (14 + Math.random()*12) + "px";
+          p.style.color = Math.random() < 0.85 ? "#ff4d8d" : "#ffffff";
+          p.style.width = "auto";
+          p.style.height = "auto";
+        } else {
+          // pink confetti piece
+          p.style.background = pinks[Math.floor(Math.random()*pinks.length)];
+          p.style.width=(8+Math.random()*8)+"px";
+          p.style.height=(10+Math.random()*12)+"px";
+        }
+
+        box.appendChild(p);
+        setTimeout(()=>p.remove(), 4200);
+      }
+    }
+
+    function bigConfetti
+(){
+      // little “finale”
+      pulseConfetti(120);
+    }
+
+    beginBtn.addEventListener("click", ()=>{
+      startScreen.style.display="none";
+      main.style.display="block";
+      pulseConfetti(40);
+    });
+
+    // Init
+    render();
+  </script>
+</body>
+</html>
